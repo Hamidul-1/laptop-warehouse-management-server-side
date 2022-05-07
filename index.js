@@ -50,7 +50,39 @@ async function run() {
             res.send(result);
         });
 
-        
+        // DELETE
+        app.delete('/item/:id', async(req, res) =>{
+            const id = req.params.id;
+            const query = {_id: ObjectId(id)};
+            const result = await serviceCollection.deleteOne(query);
+            res.send(result);
+        });
+
+
+        // delivery 
+        app.put('/item/decrease/:id', async (req, res) => {
+            const id = req.params.id;
+            const query = { _id: ObjectId(id) };
+            const items = await serviceCollection.updateOne(query, {
+                $inc: { quantity: -1 }
+
+            })
+            res.send(items)
+        })
+
+        // restore
+        app.put('/item/increase/:id', async (req, res) => {
+            const id = req.params.id;
+            const query = { _id: ObjectId(id) };
+            const quantity = parseInt(req.body.quantity);
+            const item = await serviceCollection.findOne(query);
+            const newQuantity = quantity + item.quantity;
+
+            const updateQuantity = await serviceCollection.updateOne(query, {
+                $set: { quantity: newQuantity }
+            })
+            res.send(updateQuantity);
+        })
 
     }
     finally {
