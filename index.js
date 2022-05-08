@@ -75,6 +75,15 @@ async function run() {
             res.send(updateQuantity);
         })
 
+        // my Item
+        app.get('/myitem', async (req, res) => {
+            const email = req.query.email;
+            const query = { email: email }
+            const cursor = serviceCollection.find(query);
+            const items = await cursor.toArray();
+            res.send(items)
+        })
+
     }
     finally {
 
