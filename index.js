@@ -4,9 +4,6 @@ const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 require('dotenv').config();
 const port = process.env.PORT || 5000;
 
-//dbuser1
-//GFLNZf96gbWyY1bL
-
 const app = express();
 
 // middleware
@@ -17,12 +14,7 @@ app.use(express.json());
 
 const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.kheel.mongodb.net/myFirstDatabase?retryWrites=true&w=majority`;
 const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true, serverApi: ServerApiVersion.v1 });
-/* client.connect(err => {
-    console.log('Computer');
-    const collection = client.db("test").collection("devices");
-    // perform actions on the collection object
-    client.close();
-}); */
+
 
 async function run() {
     try {
@@ -77,7 +69,6 @@ async function run() {
             const quantity = parseInt(req.body.quantity);
             const item = await serviceCollection.findOne(query);
             const newQuantity = quantity + item.quantity;
-
             const updateQuantity = await serviceCollection.updateOne(query, {
                 $set: { quantity: newQuantity }
             })
