@@ -43,9 +43,9 @@ async function run() {
         });
 
         // DELETE
-        app.delete('/item/:id', async(req, res) =>{
+        app.delete('/item/:id', async (req, res) => {
             const id = req.params.id;
-            const query = {_id: ObjectId(id)};
+            const query = { _id: ObjectId(id) };
             const result = await serviceCollection.deleteOne(query);
             res.send(result);
         });
@@ -82,6 +82,14 @@ async function run() {
             const cursor = serviceCollection.find(query);
             const items = await cursor.toArray();
             res.send(items)
+        })
+
+        app.post('/login', async (req, res) => {
+            const user = req.body;
+            const accessToken = jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, {
+                expiresIn: '1d'
+            });
+            res.send({ accessToken });
         })
 
     }
